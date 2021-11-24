@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="./static/style.css"/>
+		<title>File Transfer</title>
+	</head>
+	<body>
+		<h1>file transfer</h1>
+		<form action="/upload" method="POST" enctype="multipart/form-data" >
+			<input type="FILE" name="files[]" multiple/>
+			<select name="category">
+				{% for i in dirlist %}
+				<option value="{{i}}">
+				{{i}}
+				</option>
+				{% endfor %}
+			</select>
+			<input type="SUBMIT"/>
+		</form>
+			<ul>
+			{% for i in filesData %}
+				{% for names in i.items() %}
+				<a target="_blank" href="./download/{{names[0]}}">		<h2>{{names[0]}}</h2>
+					</a>
+					{% for file in names[1] %}
+						<li>
+							<a href="./download/{{names[0]}}/{{file}}" target="_blank">{{file}}</a>
+						</li>
+					{% endfor %}
+				{% endfor %}
+			{% endfor %}
+			</ul>
+	</body>
+</html>
