@@ -1,0 +1,25 @@
+{
+  "name": "toolswebpack",
+  "version": "0.1.1",
+  "description": "my personal home network tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohsenpoureiny/toolsWebPack.git"
+  },
+  "keywords": [
+    "tools"
+  ],
+  "author": "Mohsen Poureiny",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mohsenpoureiny/toolsWebPack/issues"
+  },
+  "homepage": "https://github.com/Mohsenpoureiny/toolsWebPack#readme",
+  "dependencies": {
+    "tailwindcss": "^2.2.19"
+  }
+}

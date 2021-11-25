@@ -1,34 +1,81 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="./static/style.css"/>
-		<title>File Transfer</title>
-	</head>
-	<body>
-		<h1>file transfer</h1>
-		<form action="/upload" method="POST" enctype="multipart/form-data" >
-			<input type="FILE" name="files[]" multiple/>
-			<select name="category">
+
+<head>
+	<link rel="stylesheet" type="text/css" href="./static/style.css" />
+	<title>File Transfer</title>
+	<link rel="manifest" href="./static/manifest.json" />
+	<link rel="shortcut icon" href="./static/favicon.png" type="image/x-icon">
+	<link rel="stylesheet" href="./static/css/bootstrap.min.css">
+	<script src="./static/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand m-2" href="#">Navbar</a>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home </a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">File Upload</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">History</a>
+					</li>
+
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<form class="container mt-5" action="/upload" method="POST" enctype="multipart/form-data">
+		<div class="row">
+			<input class="form-control" type="FILE" name="files[]" multiple />
+		</div>
+		<div class="row mt-3">
+			<select class="form-control" name="category">
 				{% for i in dirlist %}
 				<option value="{{i}}">
-				{{i}}
+					{{i}}
 				</option>
 				{% endfor %}
 			</select>
-			<input type="SUBMIT"/>
-		</form>
-			<ul>
-			{% for i in filesData %}
-				{% for names in i.items() %}
-				<a target="_blank" href="./download/{{names[0]}}">		<h2>{{names[0]}}</h2>
-					</a>
-					{% for file in names[1] %}
-						<li>
-							<a href="./download/{{names[0]}}/{{file}}" target="_blank">{{file}}</a>
-						</li>
-					{% endfor %}
-				{% endfor %}
-			{% endfor %}
-			</ul>
-	</body>
+		</div>
+		<div class="row mt-3">
+			<input class="btn btn-primary " type="SUBMIT" />
+		</div>
+	</form>
+	<ul>
+		{% for i in filesData %}
+		{% for names in i.items() %}
+		<a target="_blank" href="./download/{{names[0]}}">
+			<h2>{{names[0]}}</h2>
+		</a>
+		{% for file in names[1] %}
+		<li>
+			<a href="./download/{{names[0]}}/{{file}}" target="_blank">{{file}}</a>
+		</li>
+		{% endfor %}
+		{% endfor %}
+		{% endfor %}
+	</ul>
+	<script>
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker
+				.register("./static/serviceWorker.js")
+				.then(reg => {
+					console.log("Service worker registred successfully", reg);
+				})
+				.catch(err => {
+					console.log("service worker not registred !!", err);
+				});
+		}
+	</script>
+</body>
+
 </html>
