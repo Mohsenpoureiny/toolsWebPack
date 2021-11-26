@@ -11,7 +11,7 @@
 
 </head>
 
-<body>
+<body class="row-12">
 	<header>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<a class="navbar-brand m-2" href="#">Navbar</a>
@@ -34,6 +34,7 @@
 	</header>
 
 	<form class="container mt-5" action="/upload" method="POST" enctype="multipart/form-data">
+		<h1>Upload New Files</h1>
 		<div class="row">
 			<input class="form-control" type="FILE" name="files[]" multiple />
 		</div>
@@ -50,15 +51,18 @@
 			<input class="btn btn-primary " type="SUBMIT" />
 		</div>
 	</form>
-	<ul>
+	<ul class="container mt-5">
+		<h1>History Files</h1>
+
 		{% for i in filesData %}
 		{% for names in i.items() %}
 		<a target="_blank" href="./download/{{names[0]}}">
-			<h2>{{names[0]}}</h2>
+			<h2 class="btn btn-info">{{names[0]}} (Click To Download All)</h2>
 		</a>
 		{% for file in names[1] %}
 		<li>
-			<a href="./download/{{names[0]}}/{{file}}" target="_blank">{{file}}</a>
+			<a class="btn btn-primary" href="./download/{{names[0]}}/{{file}}" target="_blank">{{file}}</a>
+			<a class="btn btn-danger btn-sm" href="./delete/{{names[0]}}/{{file}}" target="_blank">Delete File</a>
 		</li>
 		{% endfor %}
 		{% endfor %}
