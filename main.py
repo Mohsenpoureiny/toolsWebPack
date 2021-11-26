@@ -3,8 +3,13 @@ from urllib.parse import unquote_plus
 import os
 import shutil
 import uuid
+import webbrowser
+import socket
+from threading import Timer
+
 
 app = Flask(__name__)
+port = 5000
 
 
 def deleteZipFiles():
@@ -17,26 +22,36 @@ def deleteZipFiles():
         os.remove(path_to_file)
 
 
+def open_browser():
+    webbrowser.open_new(
+        'http://'+socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/')
+
+
 @app.route("/")
 def home():
+    host = 'http://' + \
+        socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/'
     dirlist = os.listdir("./files")
     filesData = []
     for cat in dirlist:
         filesTemp = {}
         filesTemp[cat] = os.listdir("./files/"+cat)
         filesData.append(filesTemp)
-    return render_template("index.html", dirlist=dirlist, filesData=filesData)
+    return render_template("index.html", dirlist=dirlist, filesData=filesData, host=host)
 
 
 @app.route("/upload", methods=['POST'])
 def about():
-    if request.method == "POST":
-        files = request.files.getlist("files[]")
-        for file in files:
-            fileName = file.filename
-            file.save(os.path.join(
-                "./files/"+request.form["category"], fileName))
-        return redirect(url_for('home'))
+    try:
+        if request.method == "POST":
+            files = request.files.getlist("files[]")
+            for file in files:
+                fileName = file.filename
+                file.save(os.path.join(
+                    "./files/"+request.form["category"], fileName))
+    except:
+        return "500"
+    return "200"
 
 
 @app.route("/download/<category>/<name>")
@@ -54,22 +69,32 @@ def downloadCategory(category):
 
 @app.route("/delete/<category>/<name>")
 def deleteFile(category, name):
-    os.remove("./files/" + unquote_plus(category)+"/"+unquote_plus(name))
+    try:
+        os.remove("./files/" + unquote_plus(category)+"/"+unquote_plus(name))
+    except:
+        pass
     return redirect(url_for('home'))
 
 
 @app.route("/delete/<category>")
 def deleteCategory(category):
-    os.rmdir("./files/" + unquote_plus(category))
+    try:
+        shutil.rmtree("./files/" + unquote_plus(category), ignore_errors=True)
+    except:
+        pass
     return redirect(url_for('home'))
 
 
-@app.route("/create/<category>")
-def createCategory(category):
-    os.mkdir("./files/" + unquote_plus(category))
+@app.route("/create")
+def createCategory():
+    try:
+        os.mkdir("./files/" + request.args["name"])
+    except:
+        pass
     return redirect(url_for('home'))
 
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host="0.0.0.0", port=port)
+    Timer(1, open_browser).start()
+    app.run(host="0.0.0.0", port=port)
