@@ -29,6 +29,7 @@ def open_browser():
 
 @app.route("/")
 def home():
+    print(request.headers)
     host = 'http://' + \
         socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/'
     dirlist = os.listdir("./files")
