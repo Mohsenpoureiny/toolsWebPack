@@ -11,27 +11,36 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 
 env = get_env_data_as_dict('./.env')
 app = Flask(__name__)
+render_template_config = {"version": env["VERSION"]}
 
 
 @app.route("/")
 def home():
-    host = 'http://' + \
-        socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/'
     dirlist = os.listdir("./files")
     filesData = []
     for cat in dirlist:
         filesTemp = {}
         filesTemp[cat] = os.listdir("./files/"+cat)
         filesData.append(filesTemp)
-    return render_template("index.html", dirlist=dirlist, filesData=filesData, version=env["VERSION"])
+    return render_template("index.html",
+                           dirlist=dirlist,
+                           filesData=filesData,
+                           **render_template_config)
 
 
-@app.route("/hello")
-def hello():
-    return "hello"
+@app.route("/add/Category")
+def addCategory():
+    return render_template("addCategory.html", **render_template_config)
 
 
-@app.route("/upload", methods=['POST'])
+@app.route("/upload")
+def uploadFile():
+    dirlist = os.listdir("./files")
+    return render_template("upload.html", dirlist=dirlist,
+                           **render_template_config)
+
+
+@app.route("/add/file", methods=['POST'])
 def upload():
     try:
         if request.method == "POST":
@@ -102,5 +111,6 @@ if __name__ == "__main__":
     except:
         print("Connect to Internet For Update Check")
     port = int(os.environ.get('PORT', 5000))
-    Timer(1, open_browser).start()
+    if env["mode"] != "dev":
+        Timer(1, open_browser).start()
     app.run(host="0.0.0.0", port=port, debug=True)

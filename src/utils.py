@@ -1,6 +1,8 @@
 
 import webbrowser
+import os
 import socket
+import shutil
 
 
 def get_env_data_as_dict(path: str) -> dict:
