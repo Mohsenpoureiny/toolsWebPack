@@ -1,35 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-from urllib.parse import unquote_plus
-import os
-import shutil
-import uuid
-import webbrowser
-import socket
+from src.utils import *
+from zipfile import ZipFile
 from threading import Timer
+import requests
+import uuid
+import shutil
+import os
+from urllib.parse import unquote_plus
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 
 
+env = get_env_data_as_dict('./.env')
 app = Flask(__name__)
-port = 5000
-
-
-def deleteZipFiles():
-    directory = "./"
-    files_in_directory = os.listdir(directory)
-    filtered_files = [
-        file for file in files_in_directory if file.endswith(".zip")]
-    for file in filtered_files:
-        path_to_file = os.path.join(directory, file)
-        os.remove(path_to_file)
-
-
-def open_browser():
-    webbrowser.open_new(
-        'http://'+socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/')
 
 
 @app.route("/")
 def home():
-    print(request.headers)
     host = 'http://' + \
         socket.gethostbyname_ex(socket.gethostname())[-1][-1]+':'+str(port)+'/'
     dirlist = os.listdir("./files")
@@ -38,11 +23,16 @@ def home():
         filesTemp = {}
         filesTemp[cat] = os.listdir("./files/"+cat)
         filesData.append(filesTemp)
-    return render_template("index.html", dirlist=dirlist, filesData=filesData, host=host)
+    return render_template("index.html", dirlist=dirlist, filesData=filesData, version=env["VERSION"])
+
+
+@app.route("/hello")
+def hello():
+    return "hello"
 
 
 @app.route("/upload", methods=['POST'])
-def about():
+def upload():
     try:
         if request.method == "POST":
             files = request.files.getlist("files[]")
@@ -96,6 +86,21 @@ def createCategory():
 
 
 if __name__ == "__main__":
+    url = 'https://mohsenpoureiny.info/toolWeb/latest.txt'
+    try:
+        r = requests.get(url, allow_redirects=True).content.decode('utf-8')
+        if env["VERSION"] not in str(r) and env["mode"] != "dev":
+            downloadUrl = f'https://mohsenpoureiny.info/toolWeb/download/{r}.zip'
+            print(downloadUrl)
+            newVersion = requests.get(downloadUrl, allow_redirects=True)
+            open("newVersion.zip", "wb").write(newVersion.content)
+            unZipFiles("newVersion")
+            deleteZipFiles()
+            print("Updated!")
+        else:
+            print("Updated!")
+    except:
+        print("Connect to Internet For Update Check")
     port = int(os.environ.get('PORT', 5000))
     Timer(1, open_browser).start()
     app.run(host="0.0.0.0", port=port, debug=True)

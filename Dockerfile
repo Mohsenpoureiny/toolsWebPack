@@ -1,9 +1,9 @@
-FROM golang:latest
+FROM python:latest
 
 WORKDIR /home
 
-COPY main.go .
+COPY . .
 
-RUN go build main.go
+RUN pip install -r requirements.txt
 
-CMD ./main
+CMD python main.py
