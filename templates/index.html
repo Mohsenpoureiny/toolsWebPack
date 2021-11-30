@@ -36,7 +36,7 @@
 	<div id="alerts" class="container mt-3">
 	</div>
 
-	<ul class="container mt-1">
+	<ul class="container mt-1" id="dir-root">
 		{% if filesData|length == 0 %}
 		<div class="text-center">
 			<img class="empty-icon" src="./static/img/empty.png" />
@@ -79,6 +79,49 @@
 			{{version}}
 	</span>
 </main>
+<script>
+	setInterval(()=>{
+		axios.get("/api/files").then((res)=>{
+			if(res.data.dirlist.length !=0){
+			$("#dir-root").empty();
+			res.data.dirlist.map((dir)=>{
+				$("#dir-root").append(`
+					<br />
+				<br />
+				<a target="_blank" href="./download/${dir}">
+			
+					<h2 class="btn btn-light">
+						<img class="folder-icon" src="./static/img/folder.png" />
+						${dir}</h2>
+					<a class="btn btn-sm" href="./delete/${dir}">
+						<img class="folder-icon" src="./static/img/trash.png" />
+					</a>
+				</a>`);
+				res.data.filesData[dir].map((file)=>{
+				$("#dir-root").append(`
+				<li class="m-2">
+	
+					<a class="btn btn-light" href="./download/${dir}/${file}" target="_blank">
+						<img class="folder-icon" src="./static/img/file.png" />
+						${file}
+					</a>
+					<a class="btn btn-sm" href="./delete/${dir}/${file}">
+						<img class="folder-icon" src="./static/img/trash.png" />
+					</a>
+				</li>
+`);
+				})
+			})
+		}else{
+			$("#dir-root").empty();
+			$("#dir-root").append(
+			`		<div class="text-center">
+				<img class="empty-icon" src="./static/img/empty.png" />
+			</div>`);
+		}
+		})
+	},1000)
+</script>
 	<script src="./static/js/axios.min.js"></script>
 	<script src="./static/js/jquery-3.6.0.min.js"></script>
 	<script src="./static/js/bootstrap.bundle.min.js"></script>

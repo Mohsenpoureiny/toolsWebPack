@@ -28,6 +28,15 @@ def home():
                            **render_template_config)
 
 
+@app.route("/api/files")
+def filesApi():
+    dirlist = os.listdir("./files")
+    filesData = {}
+    for cat in dirlist:
+        filesData[cat] = os.listdir("./files/"+cat)
+    return {"dirlist": dirlist, "filesData": filesData, }
+
+
 @app.route("/add/Category")
 def addCategory():
     return render_template("addCategory.html", **render_template_config)

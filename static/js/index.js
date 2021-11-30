@@ -27,3 +27,4 @@ function upload() {
     .then(res => window.location.href = "/")
     .catch(err => alert("مشکلی پیش آمده!"))
 }
+
