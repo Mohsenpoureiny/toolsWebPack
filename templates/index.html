@@ -35,6 +35,8 @@
 <main class="container">
 	<div id="alerts" class="container mt-3">
 	</div>
+	
+	<h1>History Files</h1>
 
 	<ul class="container mt-1" id="dir-root">
 		{% if filesData|length == 0 %}
@@ -58,14 +60,17 @@
 		</a>
 		{% for file in names[1] %}
 		<li class="m-2">
-	
+			<a class="btn btn-sm" href="./delete/{{names[0]}}/{{file}}">
+				<img class="folder-icon" src="./static/img/trash.png" />
+			</a>
+			<a class="btn btn-sm" download="{{file}}" href="./download/{{names[0]}}/{{file}}">
+				<img class="folder-icon" src="./static/img/download.ico" />
+			</a>
 			<a class="btn btn-light" href="./download/{{names[0]}}/{{file}}" target="_blank">
 				<img class="folder-icon" src="./static/img/file.png" />
 				{{file}}
 			</a>
-			<a class="btn btn-sm" href="./delete/{{names[0]}}/{{file}}">
-				<img class="folder-icon" src="./static/img/trash.png" />
-			</a>
+		
 		</li>
 		{% endfor %}
 		{% endfor %}
@@ -100,14 +105,17 @@
 				res.data.filesData[dir].map((file)=>{
 				$("#dir-root").append(`
 				<li class="m-2">
-	
+					<a class="btn btn-sm" href="./delete/${dir}/${file}">
+						<img class="folder-icon" src="./static/img/trash.png" />
+					</a>
+					<a class="btn btn-sm" download="${file}" href="./download/${dir}/${file}">
+						<img class="folder-icon" src="./static/img/download.ico" />
+					</a>
 					<a class="btn btn-light" href="./download/${dir}/${file}" target="_blank">
 						<img class="folder-icon" src="./static/img/file.png" />
 						${file}
 					</a>
-					<a class="btn btn-sm" href="./delete/${dir}/${file}">
-						<img class="folder-icon" src="./static/img/trash.png" />
-					</a>
+					
 				</li>
 `);
 				})
