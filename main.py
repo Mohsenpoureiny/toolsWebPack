@@ -129,7 +129,8 @@ if __name__ == "__main__":
     url = "https://mohsenpoureiny.info/toolWeb/latest.txt"
     try:
         r = requests.get(url, allow_redirects=True).content.decode("utf-8")
-        if env["VERSION"] not in str(r) and env["mode"] != "dev":
+        print(r)
+        if env["VERSION"] != str(r).strip() and env["mode"] != "dev":
             downloadUrl = f"https://mohsenpoureiny.info/toolWeb/download/{r}.zip"
             print(downloadUrl)
             newVersion = requests.get(downloadUrl, allow_redirects=True)

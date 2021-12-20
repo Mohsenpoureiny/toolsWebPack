@@ -87,7 +87,6 @@
 </main>
 <script>
 	setInterval(()=>{
-		return;
 		axios.get("/api/files").then((res)=>{
 			if(res.data.dirlist.length !=0){
 			$("#dir-root").empty();
