@@ -34,3 +34,32 @@ body {
         font-size: 3.5rem;
     }
 }
+
+.btn-file {
+    width: 60%;
+    text-align: left !important;
+    word-wrap: break-word;
+
+}
+
+.file-item {
+    margin-top: 0.5rem !important;
+}
+
+@media screen and (max-width:569px) {
+    .file-item {
+        margin-top: 1rem !important;
+        /* border-left-style: solid;
+        border-left-width: 4px;
+        border-left-color: #0099ff;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+
+
+        border-right-style: solid;
+        border-right-width: 4px;
+        border-right-color: #0099ff;
+        border-top-right-radius: 30px;
+        border-bottom-right-radius: 30px; */
+    }
+}

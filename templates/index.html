@@ -58,20 +58,21 @@
 				<img class="folder-icon" src="./static/img/trash.png" />
 			</a>
 		</a>
+		<hr/>
 		{% for file in names[1] %}
-		<li class="m-2">
+		<li class=" file-item">
 			<a class="btn btn-sm" href="./delete/{{names[0]}}/{{file}}">
 				<img class="folder-icon" src="./static/img/trash.png" />
 			</a>
 			<a class="btn btn-sm" download="{{file}}" href="./download/{{names[0]}}/{{file}}">
 				<img class="folder-icon" src="./static/img/download.ico" />
 			</a>
-			<a class="btn btn-light" href="./download/{{names[0]}}/{{file}}" target="_blank">
+			<a class="btn btn-light btn-file" href="./download/{{names[0]}}/{{file}}" target="_blank">
 				<img class="folder-icon" src="./static/img/file.png" />
 				{{file}}
 			</a>
-		
 		</li>
+		<hr/>
 		{% endfor %}
 		{% endfor %}
 		{% endfor %}
@@ -86,6 +87,7 @@
 </main>
 <script>
 	setInterval(()=>{
+		return;
 		axios.get("/api/files").then((res)=>{
 			if(res.data.dirlist.length !=0){
 			$("#dir-root").empty();
@@ -104,14 +106,14 @@
 				</a>`);
 				res.data.filesData[dir].map((file)=>{
 				$("#dir-root").append(`
-				<li class="m-2">
-					<a class="btn btn-sm" href="./delete/${dir}/${file}">
+				<li class=" file-item">
+					<a class="btn btn-sm " href="./delete/${dir}/${file}">
 						<img class="folder-icon" src="./static/img/trash.png" />
 					</a>
 					<a class="btn btn-sm" download="${file}" href="./download/${dir}/${file}">
 						<img class="folder-icon" src="./static/img/download.ico" />
 					</a>
-					<a class="btn btn-light" href="./download/${dir}/${file}" target="_blank">
+					<a class="btn btn-light btn-file" href="./download/${dir}/${file}" target="_blank">
 						<img class="folder-icon" src="./static/img/file.png" />
 						${file}
 					</a>
