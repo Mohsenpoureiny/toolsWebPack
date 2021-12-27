@@ -102,7 +102,9 @@
 					<a class="btn btn-sm" href="./delete/${dir}">
 						<img class="folder-icon" src="./static/img/trash.png" />
 					</a>
-				</a>`);
+				</a>
+		<hr/>
+		`);
 				res.data.filesData[dir].map((file)=>{
 				$("#dir-root").append(`
 				<li class=" file-item">
@@ -118,6 +120,8 @@
 					</a>
 					
 				</li>
+		<hr/>
+
 `);
 				})
 			})
