@@ -20,6 +20,14 @@ env = get_env_data_as_dict("./.env")
 app = Flask(__name__)
 render_template_config = {"version": env["VERSION"]}
 
+path = "./files"
+
+isExist = os.path.exists(path)
+
+if not isExist:
+    os.makedirs(path)
+    print(path + " Created")
+
 
 @app.route("/")
 def home():
