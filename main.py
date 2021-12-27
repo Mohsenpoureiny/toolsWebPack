@@ -20,22 +20,22 @@ env = get_env_data_as_dict("./.env")
 app = Flask(__name__)
 render_template_config = {"version": env["VERSION"]}
 
-path = "./files"
+# path = "/files"
 
-isExist = os.path.exists(path)
+# isExist = os.path.exists(path)
 
-if not isExist:
-    os.makedirs(path)
-    print(path + " Created")
+# if not isExist:
+#     os.makedirs(path)
+#     print(path + " Created")
 
 
 @app.route("/")
 def home():
-    dirlist = os.listdir("./files")
+    dirlist = os.listdir("/files")
     filesData = []
     for cat in dirlist:
         filesTemp = {}
-        filesTemp[cat] = os.listdir("./files/" + cat)
+        filesTemp[cat] = os.listdir("/files/" + cat)
         filesData.append(filesTemp)
     return render_template(
         "index.html", dirlist=dirlist, filesData=filesData, **render_template_config
@@ -44,10 +44,10 @@ def home():
 
 @app.route("/api/files")
 def filesApi():
-    dirlist = os.listdir("./files")
+    dirlist = os.listdir("/files")
     filesData = {}
     for cat in dirlist:
-        filesData[cat] = os.listdir("./files/" + cat)
+        filesData[cat] = os.listdir("/files/" + cat)
     return {
         "dirlist": dirlist,
         "filesData": filesData,
@@ -64,7 +64,7 @@ def addCategory():
 
 @app.route("/upload")
 def uploadFile():
-    dirlist = os.listdir("./files")
+    dirlist = os.listdir("/files")
     if len(dirlist) == 0:
         return redirect(
             url_for("addCategory", message=".برای آپلود فایل حداقل یک کتیگوری نیاز است")
@@ -82,7 +82,7 @@ def upload():
                 if "/" in fileName:
                     segments = fileName.split("/")
                     fileName = segments[len(segments) - 1]
-                file.save(os.path.join("./files/" + request.form["category"], fileName))
+                file.save(os.path.join("/files/" + request.form["category"], fileName))
     except:
         return "500"
     return "200"
@@ -91,7 +91,7 @@ def upload():
 @app.route("/download/<category>/<name>")
 def download(category, name):
     return send_from_directory(
-        "./files/", unquote_plus(category) + "/" + unquote_plus(name)
+        "/files/", unquote_plus(category) + "/" + unquote_plus(name)
     )
 
 
@@ -100,7 +100,7 @@ def downloadCategory(category):
     try:
         deleteZipFiles()
         arcName = category + "__" + str(uuid.uuid4())
-        shutil.make_archive(arcName, "zip", "./files/" + category)
+        shutil.make_archive(arcName, "zip", "/files/" + category)
     except:
         pass
     return send_from_directory("./", arcName + ".zip")
@@ -109,7 +109,7 @@ def downloadCategory(category):
 @app.route("/delete/<category>/<name>")
 def deleteFile(category, name):
     try:
-        os.remove("./files/" + unquote_plus(category) + "/" + unquote_plus(name))
+        os.remove("/files/" + unquote_plus(category) + "/" + unquote_plus(name))
     except:
         pass
     return redirect(url_for("home"))
@@ -118,7 +118,7 @@ def deleteFile(category, name):
 @app.route("/delete/<category>")
 def deleteCategory(category):
     try:
-        shutil.rmtree("./files/" + unquote_plus(category), ignore_errors=True)
+        shutil.rmtree("/files/" + unquote_plus(category), ignore_errors=True)
     except:
         pass
     return redirect(url_for("home"))
@@ -127,7 +127,7 @@ def deleteCategory(category):
 @app.route("/create")
 def createCategory():
     try:
-        os.mkdir("./files/" + request.args["name"])
+        os.mkdir("/files/" + request.args["name"])
     except:
         pass
     return redirect(url_for("home"))
