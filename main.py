@@ -99,11 +99,11 @@ def download(category, name):
 def downloadCategory(category):
     try:
         deleteZipFiles()
-        arcName = category + "__" + str(uuid.uuid4())
+        arcName = category + "-" + str(uuid.uuid4())[:5]
         shutil.make_archive(arcName, "zip", "/files/" + category)
     except:
         pass
-    return send_from_directory("./", arcName + ".zip")
+    return send_from_directory("/", arcName + ".zip")
 
 
 @app.route("/delete/<category>/<name>")
