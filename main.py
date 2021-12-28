@@ -101,10 +101,9 @@ def downloadCategory(category):
         deleteZipFiles()
         arcName = category + "-" + str(uuid.uuid4())[:5]
         shutil.make_archive(arcName, "zip", "/files/" + category)
-        print("\ncategory")
     except Exception as e:
-        return "error" + str(e)
-    return send_from_directory("/", arcName + ".zip")
+        return str(e)
+    return send_from_directory("./", arcName + ".zip")
 
 
 @app.route("/delete/<category>/<name>")
