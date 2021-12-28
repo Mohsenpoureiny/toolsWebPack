@@ -102,8 +102,8 @@ def downloadCategory(category):
         arcName = category + "-" + str(uuid.uuid4())[:5]
         shutil.make_archive(arcName, "zip", "/files/" + category)
         print("\ncategory")
-    except:
-        pass
+    except Exception as e:
+        print("error" + str(e))
     return send_from_directory("/", arcName + ".zip")
 
 
