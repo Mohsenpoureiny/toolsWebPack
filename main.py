@@ -97,6 +97,7 @@ def download(category, name):
 
 @app.route("/download/<category>")
 def downloadCategory(category):
+    return category
     try:
         deleteZipFiles()
         arcName = category + "-" + str(uuid.uuid4())[:5]
