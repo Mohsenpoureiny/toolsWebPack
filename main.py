@@ -103,7 +103,7 @@ def downloadCategory(category):
         shutil.make_archive(arcName, "zip", "/files/" + category)
         print("\ncategory")
     except Exception as e:
-        print("error" + str(e))
+        return "error" + str(e)
     return send_from_directory("/", arcName + ".zip")
 
 
